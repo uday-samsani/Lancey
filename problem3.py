@@ -13,13 +13,38 @@
 # Output: [4|1] [1|2] [2|3] first and last numbers are not the same.
 
 # Assumption: I am given tuple
+dominoes_graph ={}
+
+def build_dominoes_graph(dominoes):
+    for domino in dominoes:
+        a, b = domino
+        if a not in dominoes_graph:
+            dominoes_graph[a] = None
+        if b not in dominoes_graph:
+            dominoes_graph[b] = None
+        dominoes_graph[a] = b
+
+def check_domino(first_el, next_el, unvisited):
+    print(first_el, next_el, unvisited)
+    if next_el == first_el:
+        if next_el in unvisited:
+            return True
+        else:
+            return False
+    unvisited.remove(next_el)
+    if dominoes_graph[next_el] is None:
+        return False
+    return check_domino(first_el, dominoes_graph[next_el], unvisited)
 
 def check_dominoes(dominoes):
-    return True
+    build_dominoes_graph(dominoes)
+    print(check_domino(dominoes[0][0], dominoes[0][1], list(dominoes_graph.keys())))
+    return check_domino(dominoes[0][0], dominoes[0][1], list(dominoes_graph.keys()))
 
 def main():
-    dominoes = [(1, 2), (2, 3), (3, 1)]
+    dominoes = [(4, 1), (3, 4), (2, 3), (1, 2)]
     result = check_dominoes(dominoes)
+    print(result)
     if result:
         print("The dominoes can be arranged to form a correct chain.")
     else:
